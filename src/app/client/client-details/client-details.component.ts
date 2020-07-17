@@ -1,10 +1,12 @@
-import { Component, OnInit, AfterContentInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterContentInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { ClientService } from 'src/app/services/client.service';
 import { FichierService } from 'src/app/services/fichier.service';
+import { BesoinUpdateModel, BesoinComponent } from 'src/app/besoin/besoin.component';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-client-details',
@@ -19,6 +21,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   nbClient: number;
   formClient: FormGroup;
   listConvesation: any;
+  listBesoinUpdated: BesoinUpdateModel[] = [];
   listBesoin: any;
   addedConversationList = [];
   addedBesoinList = [];
@@ -36,6 +39,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   push8Options = ['push8.1', 'push8.2', 'push8.3', 'push8.4', 'push8.5'];
   mySubscription: Subscription;
 
+  @ViewChild('componentBesoin') componentBesoin: BesoinComponent;
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private clientService: ClientService,
@@ -58,7 +62,6 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
      this.clientService.findAll */
     this.client = history.state.client;
     this.nbClient = history.state.nbClient
-    console.log(this.client);
     this.initForm();
     this.listConvesation = (this.client.conversations as [])?.slice();
     this.listBesoin = (this.client.besoins as [])?.slice();
@@ -69,14 +72,31 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   onInsertConvesation(conversation) {
     this.addedConversationList.push(conversation);
   }
+
   onAnnuleConversation() {
     this.addedConversationList = [];
   }
   onInsertBesoin(besoin) {
     this.addedBesoinList.push(besoin)
   }
+  onUpdateBesoin(besoin: BesoinUpdateModel) {
+    let existedBesoin = this.listBesoinUpdated.find(b => b.index == besoin.index);
+    if (existedBesoin) { // il a déjà été modifier
+      existedBesoin.etatOffre = besoin.etatOffre ?? existedBesoin.etatOffre;
+      existedBesoin.fichier = besoin.fichier ?? existedBesoin.fichier;
+      existedBesoin.index = besoin.index ?? existedBesoin.index;
+      existedBesoin.statut = besoin.statut ?? existedBesoin.statut;
+      console.log(`Déjà modifier`)
+      console.log(existedBesoin)
+    } else {
+      console.log(`Nouveau`)
+      console.log(besoin)
+      this.listBesoinUpdated.push(besoin);
+    }
+  }
   onAnnuleBesoin() {
     this.addedBesoinList = [];
+    this.listBesoinUpdated = [];
   }
   onValidConvesation() {
     let clientToUpdate = {
@@ -85,12 +105,16 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     }
     this.clientService.update(clientToUpdate).subscribe(data => {
       console.log(data);
+      this.client = data;
+      alert('Nodofication effectuée')
     }, error => console.log(error));
 
   }
   async onValidBesoin() {
+
     /** Ajouter les fichier les différents besoins */
     const asyncResBesoins = await this.uploadBesoinFichierAndMap();
+    const besoinChangedAndMapped = await this.updaodBesoinfichierAndUpdateAndMap();
     console.log("Apres ajout des fichiers");
     console.log(asyncResBesoins);
     let clientToUpdate = {
@@ -98,15 +122,23 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       // besoins: asyncResBesoins.concat(this.client?.besoins ?? []),
       besoins: [
         ...asyncResBesoins,
-        ...(this.client?.besoins as []).map(
-          (b: any) => ({
-            ...b, sources: (b?.sources as []).map(
-              (s: any) => ({ prestataire: s._links.prestataire.href }))
-          })),
+        ...besoinChangedAndMapped, // les besoins ancien qui ont été modifier
+        ...(this.client?.besoins as []) // Filter liste anciennes pour enveller les bésoins modofir
+          .filter((b, index) => this.listBesoinUpdated.length == 0 || this.listBesoinUpdated.find((bup) => index != bup.index))
+          .map( // mapper les anciens bésoins
+            (b: any) => ({
+              ...b, sources: (b?.sources as []).map(
+                (s: any) => ({ prestataire: s._links.prestataire.href }))
+            })),
       ],
     }
     this.clientService.update(clientToUpdate).subscribe(
-      data => console.log(data),
+      data => {
+        console.log(data);
+        this.client = data;
+        this.onAnnuleBesoin();
+        alert('Nodofication effectuée')
+      },
       error => console.log(error),
       () => console.log("Les besoins ajouter avec succès")
     );
@@ -127,6 +159,39 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       };
     }));
   }
+  async updaodBesoinfichierAndUpdateAndMap() {
+    /** chercher les besoins aciens doivent être modifier */
+    /*   let besoinChanged = this.listBesoin?.filter(
+        (b, index) => this.listBesoinUpdated.find(bup => bup.index == index)
+      ); */
+    const besoinChanged = this.listBesoinUpdated.map(
+      bup => ({ nouveau: bup, ancien: this.listBesoin.find((b, index) => index == bup.index) })
+    );
+    /* Supprimer ancien Fichier si on a une nouveau */
+    const besoinChangedFichierUp = await Promise.all(besoinChanged.map(async (b) => {
+      let addedFichier;
+      if (b.nouveau.fichier) {
+        addedFichier = await this.fichierService.uplodaFile(b.nouveau.fichier).toPromise();
+        if (b.ancien?.appelOffre?._links?.fichier) { // supprimer ancien fichier
+          await this.fichierService.deleteFichier(b.ancien?.appelOffre?._links?.fichier?.href).toPromise();
+        }
+      }
+      return {
+        ...b.ancien,
+        statut: b.nouveau.statut ?? b.ancien?.statut,
+        appelOffre: {
+          etatOffre: b.nouveau.etatOffre ?? b.ancien?.appelOffre?.etatOffre,
+          fichier: addedFichier ? `${environment.REST_URL}/fichiers/${addedFichier.id}` : null,
+        },
+        sources: [
+          {
+            prestataire: b.nouveau.urlPrestataire ?? b.ancien.sources[0]._links.prestataire.href
+          }
+        ]
+      };
+    }));
+    return besoinChangedFichierUp;
+  }
 
 
 
@@ -136,7 +201,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     if (this.plaquetteFileChanged) {
       // verifier s'il avait déjà une plaquette
       if (!this.client.plaquette) {
-        // ajouter le fichier de la claquette
+        // ajouter le fichier de la plaquette
         urlPlaquetteNewFile = await this.fichierService.uplodaFile(this.plaquetteFile).toPromise();
 
       } else {
@@ -210,6 +275,8 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     };
     this.clientService.update(clientToUpdate).subscribe(data => {
       console.log(data);
+      this.client = data
+      alert('Nodofication effectuée')
     }, error => console.log(error));
   }
 
@@ -222,7 +289,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       secteur: [this.entreprise?.secteur, [Validators.required]],
       activite: [this.entreprise?.activite, [Validators.required]],
       droits: [this.entreprise?.droits, [Validators.required]],
-      adresse: [this.entreprise?.droits, [Validators.required]],
+      adresse: [this.entreprise?.adresse, [Validators.required]],
       codePostale: [this.entreprise?.codePostale, [Validators.required]],
       ville: [this.entreprise?.ville, [Validators.required]],
       notes: [this.entreprise?.notes,],
@@ -283,8 +350,9 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   annuler() {
     this.addedConversationList = [];
     this.addedBesoinList = [];
-
+    this.listBesoinUpdated = [];
   }
+
 
 
   ngOnDestroy() {

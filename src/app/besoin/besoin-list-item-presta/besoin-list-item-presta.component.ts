@@ -27,7 +27,6 @@ export class BesoinListItemPrestaComponent implements OnInit {
       this.fichierService.findByUrl(cvLink).subscribe(
         fichier => this.cv = fichier,
         error => console.log(error),
-        () => console.log("chargment cv complet" + this.cv.title)
       );
 
     }, error => console.log(error));

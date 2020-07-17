@@ -3,6 +3,15 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { FichierService } from '../services/fichier.service';
 import { PrestataireService } from '../services/prestataire.service';
 
+
+export interface BesoinUpdateModel {
+  index?: number;
+  statut?: string;
+  etatOffre?: string;
+  fichier?: File;
+  urlPrestataire?: string;
+}
+
 @Component({
   selector: 'app-besoin',
   templateUrl: './besoin.component.html',
@@ -15,6 +24,7 @@ export class BesoinComponent implements OnInit {
   @Output() onValid: EventEmitter<any> = new EventEmitter();
   @Output() onAnnule: EventEmitter<any> = new EventEmitter();
   @Output() onInserteItem: EventEmitter<any> = new EventEmitter();
+  @Output() onUpdateItem = new EventEmitter<BesoinUpdateModel>();
 
   prestataires: any;
 
@@ -25,6 +35,11 @@ export class BesoinComponent implements OnInit {
   urlPrestataire = new FormControl('', [Validators.required]);
   dateEnvoie = new FormControl('', [Validators.required]);
 
+  optionsStatut = ['en cours', 'terminé'];
+  optionsEtatOffre = ['en attente', 'oui'];
+
+  defaultValue = true;
+  formControls: { statut: FormControl, etatOffre: FormControl }[];
 
   constructor(
     private prestataireService: PrestataireService,
@@ -38,6 +53,7 @@ export class BesoinComponent implements OnInit {
       },
       error => console.log(error)
     );
+    this.resetForm();
   }
 
   onInsert() {
@@ -73,9 +89,17 @@ export class BesoinComponent implements OnInit {
     const file = event.target.files[0];
     this.file = file;
   }
-  emitFileOp(event, indexBesoin) {
 
+  updateStatut(event, index: number) {
+    this.onUpdateItem.emit({ index: index, statut: event.target.value });
   }
+  updateEtatOffre(event: any, index: number) {
+    this.onUpdateItem.emit({ index: index, etatOffre: event.target.value });
+  }
+  updateFichier(event: any, index: number) {
+    this.onUpdateItem.emit({ index: index, fichier: event.target.files[0] });
+  }
+
   onClickAffichOA(urlFile: string) {
     this.fichierService.findByUrl(urlFile).subscribe(
       data => {
@@ -89,6 +113,18 @@ export class BesoinComponent implements OnInit {
       error => console.log(error)
     );
   }
+  annule() {
+    this.resetForm();
+    this.onAnnule.emit();
+  }
+  resetForm() {
+    this.formControls = this.besoins.map(
+      (b: any) => ({
+        statut: new FormControl(b.statut),
+        etatOffre: new FormControl(b?.appelOffre?.etatOffre)
+      }));
+  }
+
 
   /*  initForm() {
      this.formBesoin = this.formBuilder.group({
