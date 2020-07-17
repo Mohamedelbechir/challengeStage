@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PrestataireService } from 'src/app/prestataire/prestataire.service';
-import { ClientService } from 'src/app/client/client.service';
+import { PrestataireService } from 'src/app/services/prestataire.service';
+import { ClientService } from 'src/app/services/client.service';
+import { FichierService } from 'src/app/services/fichier.service';
 
 @Component({
   selector: 'app-besoin-list-item-presta',
@@ -12,8 +13,10 @@ export class BesoinListItemPrestaComponent implements OnInit {
   prestataire: any;
   cv: any;
 
-  constructor(private prestataireService: PrestataireService,
-    private clientService: ClientService) { }
+  constructor(
+    private prestataireService: PrestataireService,
+    private fichierService: FichierService
+  ) { }
 
   ngOnInit(): void {
     this.prestataireService.findByUrl(this.urlPrestaire).subscribe(presta => {
@@ -21,7 +24,7 @@ export class BesoinListItemPrestaComponent implements OnInit {
       this.prestataire = presta;
       let cvLink = presta._links.cv?.href;
 
-      this.clientService.findFichier(cvLink).subscribe(
+      this.fichierService.findByUrl(cvLink).subscribe(
         fichier => this.cv = fichier,
         error => console.log(error),
         () => console.log("chargment cv complet" + this.cv.title)

@@ -1,9 +1,10 @@
 import { Component, OnInit, AfterContentInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { ClientService } from '../client.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
+import { ClientService } from 'src/app/services/client.service';
+import { FichierService } from 'src/app/services/fichier.service';
 
 @Component({
   selector: 'app-client-details',
@@ -38,6 +39,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private clientService: ClientService,
+    private fichierService: FichierService,
     private formBuilder: FormBuilder,
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
@@ -114,7 +116,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
   private async uploadBesoinFichierAndMap() {
     return await Promise.all(this.addedBesoinList.map(async (besoin) => {
       let addedFichier = besoin.appelOffre.fichier ?
-        await this.clientService.uplodaFile(besoin.appelOffre.fichier).toPromise()
+        await this.fichierService.uplodaFile(besoin.appelOffre.fichier).toPromise()
         : null;
       return {
         ...besoin,
@@ -135,16 +137,16 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       // verifier s'il avait déjà une plaquette
       if (!this.client.plaquette) {
         // ajouter le fichier de la claquette
-        urlPlaquetteNewFile = await this.clientService.uplodaFile(this.plaquetteFile).toPromise();
+        urlPlaquetteNewFile = await this.fichierService.uplodaFile(this.plaquetteFile).toPromise();
 
       } else {
         // Supprimer ancien plaquette ajouter un autre
         if (this.client?.plaquette?._links) {
           console.log(`Suppression de l'ancien photo ${this.client?.plaquette?._links?.fichier?.href}`)
-          await this.clientService.deleteFichier(this.client?.plaquette?._links?.fichier?.href).toPromise();
+          await this.fichierService.deleteFichier(this.client?.plaquette?._links?.fichier?.href).toPromise();
 
         }
-        urlPlaquetteNewFile = await this.clientService.uplodaFile(this.plaquetteFile).toPromise();
+        urlPlaquetteNewFile = await this.fichierService.uplodaFile(this.plaquetteFile).toPromise();
       }
 
     }

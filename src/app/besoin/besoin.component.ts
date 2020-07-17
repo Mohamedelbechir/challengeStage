@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PrestataireService } from '../prestataire/prestataire.service';
+import { FichierService } from '../services/fichier.service';
+import { PrestataireService } from '../services/prestataire.service';
 
 @Component({
   selector: 'app-besoin',
@@ -26,12 +27,17 @@ export class BesoinComponent implements OnInit {
 
 
   constructor(
-    private prestataireService: PrestataireService) { }
+    private prestataireService: PrestataireService,
+    private fichierService: FichierService
+  ) { }
 
   ngOnInit(): void {
-    this.prestataireService.findAll().subscribe((prsts: any) => {
-      this.prestataires = prsts?._embedded?.prestataires;
-    }, error => console.log(error))
+    this.prestataireService.findAll().subscribe(
+      prsts => {
+        this.prestataires = prsts?._embedded?.prestataires;
+      },
+      error => console.log(error)
+    );
   }
 
   onInsert() {
@@ -66,6 +72,22 @@ export class BesoinComponent implements OnInit {
   emitFiles(event) {
     const file = event.target.files[0];
     this.file = file;
+  }
+  emitFileOp(event, indexBesoin) {
+
+  }
+  onClickAffichOA(urlFile: string) {
+    this.fichierService.findByUrl(urlFile).subscribe(
+      data => {
+        const linkSource = `data:application/${data.libele.split('.')[1] ?? 'png'};base64,${data.encodedFichier}`;
+        const downloadLink = document.createElement("a");
+        const fileName = data.libele;
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+      },
+      error => console.log(error)
+    );
   }
 
   /*  initForm() {

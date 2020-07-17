@@ -1,11 +1,11 @@
 import { Component, OnInit, AfterContentInit } from '@angular/core';
-import { ClientService } from './client.service';
 import { Router } from '@angular/router';
 import { Observable, fromEvent, of } from "rxjs";
 import { map, filter, debounceTime, switchMap, isEmpty } from "rxjs/operators";
 import { FormControl } from '@angular/forms';
 import { Client } from 'src/models/client';
 import { Source } from 'src/models/source';
+import { ClientService } from '../services/client.service';
 
 @Component({
   selector: 'app-client',
@@ -27,10 +27,6 @@ export class ClientComponent implements OnInit, AfterContentInit {
     this.clientService.findAll().subscribe((data) => {
       this.listClient = data._embedded.clients;
     }, error => console.log(error));
-    this.clientService.findAllInterface().subscribe((data: Client[]) => {
-      console.log((data[0].besoins[0].sources[0] as Source)._links.prestataire.href);
-    })
-    
   }
   ngAfterContentInit(): void {
     const inputNom: any = document.getElementById('seach_nom');
@@ -40,8 +36,6 @@ export class ClientComponent implements OnInit, AfterContentInit {
 
 
     const loadNewList = () => {
-
-      console.log(inputBesoin.value);
       this.listClientSearch =
         this.listClient.filter(c =>
           (this.predicatNom(inputNom.value ?? '', c)) &&
@@ -49,7 +43,6 @@ export class ClientComponent implements OnInit, AfterContentInit {
           (this.predicatBesoin(inputBesoin.value ?? '', c)) &&
           (this.predicatPush(inputPush.value ?? '', c))
         );
-      console.log(this.listClientSearch);
     }
     fromEvent(inputNom, 'keyup')
       .pipe(
@@ -78,9 +71,9 @@ export class ClientComponent implements OnInit, AfterContentInit {
 
   }
   onSelect(client) {
-    this.router.navigateByUrl('/client-details', { state: {client:client, nbClient: this.listClient.length} });
+    this.router.navigateByUrl('/client-details', { state: { client: client, nbClient: this.listClient.length } });
   }
-  
+
   predicatNom = (nom: string, c: any): boolean => nom.length == 0 || c.nom.toLocaleLowerCase() === nom.toLocaleLowerCase();
 
   predicatRappel = (rappel: Date, c: any): boolean => c?.rappel >= rappel;
