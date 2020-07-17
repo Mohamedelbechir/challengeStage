@@ -1,0 +1,82 @@
+<div class="container container-fluid">
+    <div class="row my-5">
+        <div class="col-12 col-sm-6 col-lg-3 pr-0 mt-2">
+            <span class="font-weight-bold col-3  col-sm-4 d-inline-block p-2 bg-light text-success rounded">Critère
+                1</span>
+            <div class="col-9 col-sm-8 d-inline-block pl-2">
+                <input id="seach_nom" type="text" class="form-control  form-control-sm" placeholder="nom">
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3 pr-0 mt-2">
+            <span class="font-weight-bold col-3 col-sm-4 p-2 d-inline-block bg-light text-success rounded">Critère
+                2</span>
+            <div class="col-9 col-sm-8 d-inline-block pl-2">
+                <input [formControl]="seach_rappel" id="seach_rappel" type="date" class="form-control  form-control-sm">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 pr-0 mt-2">
+            <span class="font-weight-bold col-3 col-sm-4 p-2 d-inline-block bg-light text-success rounded">Critère
+                3</span>
+            <div class="col-9  col-sm-8 d-inline-block pl-2">
+                <input id="seach_besoin" type="text" class="form-control  form-control-sm" placeholder="besoin">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 pr-0 mt-2">
+            <span class="font-weight-bold col-3 col-sm-4  p-2 d-inline-block bg-light text-success rounded">Critère
+                4</span>
+            <div class="col-9  col-sm-8 d-inline-block pl-2">
+                <input id="seach_push" type="text" class="form-control  form-control-sm" placeholder="push">
+            </div>
+        </div>
+
+    </div>
+    <div class="card p-2">
+        <h3>Resultats de la recherche</h3>
+
+        <table *ngIf="listClientSearch" class="table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th *ngIf="showRappel">Rappel</th>
+                    <th style="width: 300px;" *ngIf="showBesoins">Besoins</th>
+                    <th style="width: 100px;" *ngIf="showPush">Pushs</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="cursor: pointer;" (click)="onSelect(item)" *ngFor="let item of listClientSearch">
+                    <td>{{item.nom}}</td>
+                    <td>{{item.prenom}}</td>
+                    <td *ngIf="showRappel">{{item.rappel}}</td>
+                    <td *ngIf="showBesoins">
+                        <div class="p-1 m-1 bg-light" *ngFor="let b of item.besoins"> {{b.description}}</div>
+                    </td>
+                    <td *ngIf="showPush">
+                        <span class="d-inline-block p-1" *ngFor="let p of item?.pushs">
+                            <span class="p-1 bg-light"> {{p}}</span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card p-2 mt-5">
+        <h3>Liste des clients</h3>
+
+        <table *ngIf="listClient" class="table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="cursor: pointer;" (click)="onSelect(item)" *ngFor="let item of listClient">
+                    <td>{{item.nom}}</td>
+                    <td>{{item.prenom}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,258 @@
+<h1>
+    Suivie des relation client
+</h1>
+
+<!-- debut Entreprise -->
+<form *ngIf="client" [formGroup]="formClient" (ngSubmit)="onSubmit(formClient.value)">
+    <div class="card shadow-sm p-2">
+        <h3>Entreprise</h3>
+        <div class="row mt-4">
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="nomEntreprise">Nom</label>
+                <input formControlName="nomEnp" type="text" class="form-control form-control-sm"
+                    placeholder="nom de l'entreprise">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="secteur">Secteur</label>
+                <input formControlName="secteur" type="text" class="form-control form-control-sm" placeholder="secteur">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="activite">Activité</label>
+                <input formControlName="activite" type="text" class="form-control form-control-sm"
+                    placeholder="activite">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-1">
+                <label for="droits">Droits</label>
+                <input formControlName="droits" type="text" class="form-control form-control-sm" placeholder="droits">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="adresse">Adresse</label>
+                <input formControlName="adresse" type="text" class="form-control  form-control-sm"
+                    placeholder="adresse">
+            </div>
+
+            <div class="form-group col-12 col-sm-6 col-md-1">
+                <label for="codePostale">code postal</label>
+                <input formControlName="codePostale" type="tel" class="form-control  form-control-sm"
+                    placeholder="code postal">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="ville">ville</label>
+                <input formControlName="ville" type="text" class="form-control  form-control-sm" placeholder="ville">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="notes">Notes</label>
+                <input formControlName="notes" type="text" class="form-control  form-control-sm" placeholder="notes">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="telephoneEnpU">Téléphone 1</label>
+                <input formControlName="telephoneEnpU" type="tel" class="form-control  form-control-sm"
+                    placeholder="téléphone 1">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="telephoneEnpD">Téléphone 2</label>
+                <input formControlName="telephoneEnpD" type="tel" class="form-control  form-control-sm"
+                    placeholder="téléphone 2">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="precisions">Précisions</label>
+                <input formControlName="precisions" type="text" class="form-control  form-control-sm"
+                    placeholder="précisions">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="emailEnp">Email</label>
+                <input formControlName="emailEnp" type="email" class="form-control  form-control-sm"
+                    placeholder="email">
+            </div>
+            <div class="form-group col-12 col-sm-6 col-md-4">
+                <label for="linkedInEnp">LinkedInd</label>
+                <input formControlName="linkedInEnp" type="text" class="form-control  form-control-sm"
+                    placeholder="linkedInd">
+            </div>
+        </div>
+    </div>
+    <!-- fin Entreprise -->
+    <!-- Debut partie contact -->
+    <div class="card p-2 shadow-sm mt-3">
+        <h3>Contact</h3>
+        <div class="row mt-4">
+
+            <div class="col-12 col-lg-4">
+                <!-- debut Partie 1 -->
+                <div class="row">
+                    <div class="form-group col-6 col-md-3">
+                        <label for="nom">Nom</label>
+                        <input formControlName="nom" type="text" class="form-control  form-control-sm"
+                            placeholder="Nom">
+                    </div>
+                    <div class="form-group col-6 col-md-3">
+                        <label for="prenom">Prénom</label>
+                        <input formControlName="prenom" type="text" class="form-control  form-control-sm"
+                            placeholder="prénom">
+                    </div>
+                    <div class="form-group col-6 col-md-2">
+                        <label for="statut">Statut</label>
+                        <input formControlName="statut" type="text" class="form-control  form-control-sm"
+                            placeholder="statut">
+                    </div>
+                    <div class="form-group col-6 col-md-4">
+                        <label for="rappel">Rappel</label>
+                        <input formControlName="rappel" type="date" class="form-control  form-control-sm"
+                            placeholder="rappel">
+                    </div>
+                    <div class="form-group col-6 col-md-6">
+                        <label for="titre">Titre</label>
+                        <input formControlName="titre" type="text" class="form-control  form-control-sm"
+                            placeholder="titre">
+                    </div>
+                    <div class="form-group col-6 col-md-6">
+                        <label for="email">Email</label>
+                        <input formControlName="email" type="email" class="form-control  form-control-sm"
+                            placeholder="email">
+                    </div>
+                    <div class="form-group col-6 col-md-3">
+                        <label for="telephoneU">Télephone 1</label>
+                        <input formControlName="telephoneU" type="tel" class="form-control  form-control-sm"
+                            placeholder="téléphone 1">
+                    </div>
+                    <div class="form-group col-6 col-md-3">
+                        <label for="telephoneD">Télephone 2</label>
+                        <input formControlName="telephoneD" type="tel" class="form-control  form-control-sm"
+                            placeholder="téléphone 2">
+                    </div>
+                    <div class="form-group col-6 col-md-3">
+                        <label for="telephoneM">Mobile</label>
+                        <input formControlName="telephoneM" type="tel" class="form-control  form-control-sm"
+                            placeholder="Mobile">
+                    </div>
+                    <div class="form-group col-6 col-md-3">
+                        <label for="linkedIn">LinkedInd</label>
+                        <input formControlName="linkedIn" type="email" class="form-control  form-control-sm"
+                            placeholder="LinkedInd">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="observation">Observations</label>
+                        <input formControlName="observation" type="text" class="form-control  form-control-sm"
+                            placeholder="Observations">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="techOutils">Techos/Outils</label>
+                        <input formControlName="techOutils" type="text" class="form-control  form-control-sm"
+                            placeholder="techos/toutils">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="contactPush">Contact push</label>
+                        <div class="row">
+                            <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                <select formControlName="push1" class="form-control  form-control-sm">
+                                    <option *ngFor="let push of push1Options" [value]="push">{{push}}</option>
+                                    <!--  <option value="push1.1">push1.1</option>
+                                    <option value="push1.2">push1.2</option> -->
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                <select formControlName="push2" class="form-control  form-control-sm">
+                                    <option *ngFor="let push of push2Options" [value]="push">{{push}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                <select formControlName="push3" class="form-control  form-control-sm">
+                                    <option *ngFor="let push of push3Options" [value]="push">{{push}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                <select formControlName="push4" class="form-control  form-control-sm">
+                                    <option *ngFor="let push of push4Options" [value]="push">{{push}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                <select formControlName="push5" class="form-control form-control-sm">
+                                    <option *ngFor="let push of push5Options" [value]="push">{{push}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                <select formControlName="push6" class="form-control  form-control-sm">
+                                    <option *ngFor="let push of push6Options" [value]="push">{{push}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                <select formControlName="push7" class="form-control form-control-sm">
+                                    <option *ngFor="let push of push7Options" [value]="push">{{push}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                <select formControlName="push8" class="form-control form-control-sm">
+                                    <option *ngFor="let push of push8Options" [value]="push">{{push}}</option>
+                                </select>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <div class="form-inline col-12">
+
+                        <div class="form-group">
+                            <label for="plaquette">Plaquette</label>
+                            <input formControlName="datePlaquette" [value]="client?.plaquette?.date" type="date"
+                                class="form-control form-control-sm ml-2">
+                            <label for="plaquetteFile" class="span-for-icon">
+
+                                <svg style="width: 2rem; height: 2rem;fill:black;" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 50 50" enable-background="new 0 0 50 50">
+                                    <path
+                                        d="M13.8 39.6c-1.5 0-3.1-.6-4.2-1.8-2.3-2.3-2.3-6.1 0-8.5l17-17c3.1-3.1 8.2-3.1 11.3 0 3.1 3.1 3.1 8.2 0 11.3L25.1 36.4 23.7 35l12.7-12.7c2.3-2.3 2.3-6.1 0-8.5-2.3-2.3-6.1-2.3-8.5 0l-17 17c-.8.8-1.2 1.8-1.2 2.8 0 1.1.4 2.1 1.2 2.8 1.6 1.6 4.1 1.6 5.7 0l12.7-12.7c.8-.8.8-2 0-2.8-.8-.8-2-.8-2.8 0L18 29.3l-1.4-1.4 8.5-8.5c1.6-1.6 4.1-1.6 5.7 0 1.6 1.6 1.6 4.1 0 5.7L18 37.8c-1.1 1.2-2.7 1.8-4.2 1.8z" />
+                                </svg>
+                                <input id="plaquetteFile" (change)="emitPlaquetteFiles($event)" type="file">
+
+                            </label>
+                            <span class="small">{{ getPlaquetteLibele }}</span>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Partie 1 -->
+            </div>
+            <div class="col-12 col-lg-8">
+                <!-- debut Partie 2 -->
+
+                <app-conversation [trigramme]="trigramme" [conversations]="listConvesation"
+                    [convesationsNew]="addedConversationList" (onInserteItem)="onInsertConvesation($event)"
+                    (onValid)="onValidConvesation()" (onAnnule)="onAnnuleConversation()">
+                </app-conversation>
+                <app-besoin [besoins]="listBesoin" [besoinsNew]="addedBesoinList" (onValid)="onValidBesoin()"
+                    (onAnnule)="onAnnuleBesoin()" (onInserteItem)="onInsertBesoin($event)">
+                </app-besoin>
+                <!-- fin Partie 2 -->
+            </div>
+        </div>
+        <div class="m-2">
+            <a [routerLink]="[ '/clients']"
+                class="d-flex justify-content-between py-2 px-4 bg-light font-weight-bold rounded">
+                <span>
+
+                    <svg style="width: 1.5rem; height: 1.5rem;" xmlns="http://www.w3.org/2000/svg">
+                        <g id="g3028" stroke-width="2.23">
+                            <path inkscape:connector-curvature="0" id="path4003"
+                                style="font-size:11.38508987000000000px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:rgb(2, 2, 131);fill-opacity:1;stroke:none;font-family:Segoe UI Symbol;-inkscape-font-specification:Segoe UI Symbol"
+                                d="m 1.731867,9.9956035 c 2e-5,0.7560365 0.09966,1.4842425 0.298902,2.1846165 0.199287,0.700357 0.477675,1.358232 0.835165,1.973627 0.357528,0.615372 0.786831,1.175079 1.287912,1.67912 0.501116,0.504017 1.057891,0.936251 1.67033,1.296703 0.612469,0.360426 1.270344,0.640279 1.973627,0.839561 0.703309,0.199253 1.432978,0.298886 2.18901,0.298901 0.756055,-1.5e-5 1.484259,-0.09965 2.184616,-0.298901 0.700375,-0.199282 1.355319,-0.479135 1.964834,-0.839561 0.609531,-0.360452 1.167773,-0.792686 1.674726,-1.296703 0.506965,-0.504041 0.940664,-1.063748 1.301099,-1.67912 0.360444,-0.615395 0.641762,-1.27327 0.843956,-1.973627 0.202201,-0.700374 0.3033,-1.42858 0.303296,-2.1846165 4e-6,-0.756049 -0.09963,-1.484254 -0.298901,-2.184615 -0.199263,-0.70037 -0.479116,-1.356779 -0.83956,-1.969231 -0.360435,-0.612454 -0.792669,-1.169231 -1.296704,-1.67033 -0.504022,-0.501098 -1.063729,-0.931867 -1.67912,-1.292307 -0.615377,-0.360439 -1.273251,-0.640292 -1.973626,-0.839561 -0.700357,-0.199264 -1.428561,-0.298899 -2.184616,-0.2989 -0.756032,10e-7 -1.485701,0.09964 -2.18901,0.2989 -0.703283,0.199269 -1.361158,0.477658 -1.973627,0.835165 -0.612439,0.357511 -1.169214,0.786814 -1.67033,1.287912 -0.501081,0.501099 -0.930384,1.05934 -1.287912,1.674726 -0.35749,0.615382 -0.635878,1.273256 -0.835165,1.973626 -0.199247,0.700361 -0.298882,1.428566 -0.298902,2.184615 z m 2.769231,0.035172 0,-0.035172 4.026374,-4.210988 2.918682,0 -3.068132,3.138462 6.672527,0 0,2.1802195 -6.672527,0 3.068132,3.138461 -2.918682,0 z M 0,9.9868115 c 2.0999981e-5,-0.90843 0.120171,-1.784619 0.360439,-2.628572 0.240315,-0.843958 0.58024,-1.636632 1.01978,-2.378021 0.43958,-0.741393 0.964123,-1.416851 1.573627,-2.026375 C 3.563387,2.3443225 4.238845,1.8197795 4.980218,1.3802185 5.721627,0.94065953 6.515765,0.60073453 7.362637,0.36043753 8.209538,0.12014953 9.087192,2.5255985e-6 9.995604,-4.7440151e-7 10.90404,2.5255985e-6 11.781694,0.12015453 12.628571,0.36043853 c 0.846895,0.240297 1.641033,0.577292 2.382418,1.01098997 0.741398,0.433701 1.41832,0.955312 2.030769,1.564835 0.612458,0.609524 1.138465,1.284982 1.578022,2.026374 0.439563,0.74139 0.77949,1.535528 1.01978,2.382416 0.240295,0.846883 0.360442,1.727468 0.36044,2.641759 2e-6,0.9084175 -0.120145,1.7860735 -0.36044,2.6329675 -0.24029,0.846877 -0.580217,1.641015 -1.01978,2.382417 -0.439557,0.74138 -0.965564,1.418303 -1.578022,2.03077 -0.612449,0.61244 -1.289371,1.138447 -2.030769,1.578022 -0.741385,0.439545 -1.535523,0.780937 -2.382418,1.024176 C 11.781694,19.878372 10.90404,19.999984 9.995604,20 9.087192,19.999984 8.209538,19.879837 7.362637,19.63956 6.515765,19.399252 5.721627,19.06079 4.980218,18.624176 4.238845,18.187531 3.563387,17.66299 2.953846,17.050549 2.344342,16.438082 1.819799,15.761159 1.380219,15.019779 0.940679,14.278377 0.600754,13.482774 0.360439,12.632967 0.120168,11.783143 2.0999981e-5,10.901091 0,9.9868125 z" />
+                        </g>
+                    </svg>
+                    <span class="ml-3">{{nbClient}} contacts(s)</span>
+                </span>
+
+
+                <span>Retour à la fiche client {{nbClient}} contacts(s)</span>
+            </a>
+        </div>
+    </div>
+    <!-- Fin partie contact -->
+    <div class="p-4 text-center">
+        <button type="button" class="btn btn-light mr-4" (click)="annuler()">
+            annuler
+        </button>
+        <button type="submit" class="btn btn-success ">
+            valider
+        </button>
+    </div>
+</form>
