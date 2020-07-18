@@ -30,8 +30,8 @@ export class BesoinComponent implements OnInit {
 
   file: File | null = null;
   description = new FormControl('', [Validators.required]);
-  statut = new FormControl('encours');
-  etatOffre = new FormControl('attente');
+  statut = new FormControl('en cours');
+  etatOffre = new FormControl('en attente');
   urlPrestataire = new FormControl('', [Validators.required]);
   dateEnvoie = new FormControl('', [Validators.required]);
 
@@ -118,6 +118,7 @@ export class BesoinComponent implements OnInit {
     this.onAnnule.emit();
   }
   resetForm() {
+  
     this.formControls = this.besoins.map(
       (b: any) => ({
         statut: new FormControl(b.statut),

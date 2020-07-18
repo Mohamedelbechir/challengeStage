@@ -11,7 +11,6 @@ import { ConversationComponent } from './conversation/conversation.component';
 import { BesoinComponent } from './besoin/besoin.component';
 import { BesoinListItemPrestaComponent } from './besoin/besoin-list-item-presta/besoin-list-item-presta.component';
 import { PrestataireComponent } from './prestataire/prestataire.component';
-import { AfficherFichierComponent } from './afficher-fichier/afficher-fichier.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,8 +19,7 @@ import { AfficherFichierComponent } from './afficher-fichier/afficher-fichier.co
     ConversationComponent,
     BesoinComponent,
     BesoinListItemPrestaComponent,
-    PrestataireComponent,
-    AfficherFichierComponent
+    PrestataireComponent
   ],
   imports: [
     BrowserModule,

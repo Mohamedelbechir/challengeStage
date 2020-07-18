@@ -106,13 +106,13 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     this.clientService.update(clientToUpdate).subscribe(data => {
       console.log(data);
       this.client = data;
-      alert('Nodofication effectuée')
+      alert('Nodification effectuée')
     }, error => console.log(error));
 
   }
   async onValidBesoin() {
 
-    /** Ajouter les fichier les différents besoins */
+    /** Ajouter les fichiers les différents besoins */
     const asyncResBesoins = await this.uploadBesoinFichierAndMap();
     const besoinChangedAndMapped = await this.updaodBesoinfichierAndUpdateAndMap();
     console.log("Apres ajout des fichiers");
@@ -122,8 +122,8 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
       // besoins: asyncResBesoins.concat(this.client?.besoins ?? []),
       besoins: [
         ...asyncResBesoins,
-        ...besoinChangedAndMapped, // les besoins ancien qui ont été modifier
-        ...(this.client?.besoins as []) // Filter liste anciennes pour enveller les bésoins modofir
+        ...besoinChangedAndMapped, // les besoins anciens qui ont été modifiés
+        ...(this.client?.besoins as []) // Filter liste anciennes pour enveller les bésoins modofiés
           .filter((b, index) => this.listBesoinUpdated.length == 0 || this.listBesoinUpdated.find((bup) => index != bup.index))
           .map( // mapper les anciens bésoins
             (b: any) => ({
@@ -137,14 +137,14 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         console.log(data);
         this.client = data;
         this.onAnnuleBesoin();
-        alert('Nodofication effectuée')
+        alert('Nodification effectuée')
       },
       error => console.log(error),
-      () => console.log("Les besoins ajouter avec succès")
+      () => console.log("Les besoins ajouté avec succès")
     );
 
   }
-  /** Ajouter les fichiers des different bésoin et mettre les bons lien des prestaire */
+  /** Ajouter les fichiers des differents bésoins et mettre les bons liens des prestataire */
   private async uploadBesoinFichierAndMap() {
     return await Promise.all(this.addedBesoinList.map(async (besoin) => {
       let addedFichier = besoin.appelOffre.fichier ?
@@ -167,7 +167,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     const besoinChanged = this.listBesoinUpdated.map(
       bup => ({ nouveau: bup, ancien: this.listBesoin.find((b, index) => index == bup.index) })
     );
-    /* Supprimer ancien Fichier si on a une nouveau */
+    /* Supprimer ancien Fichier si on a un nouveau */
     const besoinChangedFichierUp = await Promise.all(besoinChanged.map(async (b) => {
       let addedFichier;
       if (b.nouveau.fichier) {
@@ -181,7 +181,8 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         statut: b.nouveau.statut ?? b.ancien?.statut,
         appelOffre: {
           etatOffre: b.nouveau.etatOffre ?? b.ancien?.appelOffre?.etatOffre,
-          fichier: addedFichier ? `${environment.REST_URL}/fichiers/${addedFichier.id}` : null,
+          fichier: addedFichier ?
+            `${environment.REST_URL}/fichiers/${addedFichier.id}` : b.ancien?.appelOffre?._links?.fichier?.href ?? null,
         },
         sources: [
           {
@@ -205,7 +206,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         urlPlaquetteNewFile = await this.fichierService.uplodaFile(this.plaquetteFile).toPromise();
 
       } else {
-        // Supprimer ancien plaquette ajouter un autre
+        // Supprimer ancienne plaquette et  ajouter un autre
         if (this.client?.plaquette?._links) {
           console.log(`Suppression de l'ancien photo ${this.client?.plaquette?._links?.fichier?.href}`)
           await this.fichierService.deleteFichier(this.client?.plaquette?._links?.fichier?.href).toPromise();
@@ -276,7 +277,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     this.clientService.update(clientToUpdate).subscribe(data => {
       console.log(data);
       this.client = data
-      alert('Nodofication effectuée')
+      alert('Nodification effectuée')
     }, error => console.log(error));
   }
 
